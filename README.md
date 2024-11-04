@@ -38,6 +38,23 @@ A simple shell script to install a LAMP stack (Linux, Apache, MySQL, PHP) along 
 - **Composer**: Available globally with the `composer` command.
 - **Domains Directory**: Access via `/var/www/domains` or the symlink at `/domains`.
 
+## Setting MySQL Root Password (Optional)
+
+To set a password for the MySQL root user, you can use the following commands:
+
+1. Open the MySQL shell:
+   ```bash
+   sudo mysql
+   ```
+2. Set the root password (replace `password` with your desired password):
+   ```sql
+   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+   ```
+3. Exit the MySQL shell:
+   ```bash
+   exit
+   ```
+
 ## Script Breakdown
 
 | Step                         | Description                                                                                       |
@@ -54,4 +71,3 @@ A simple shell script to install a LAMP stack (Linux, Apache, MySQL, PHP) along 
 
 - This script is designed for a fresh installation on an Ubuntu server. It may override existing configurations.
 - Please ensure any existing services or configurations are backed up before running this script.
-
