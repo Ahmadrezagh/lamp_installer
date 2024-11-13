@@ -12,6 +12,10 @@ sudo apt install apache2 -y
 sudo systemctl start apache2
 sudo systemctl enable apache2
 
+# Enable rewrite module in Apache
+echo "Enabling rewrite module in Apache..."
+sudo a2enmod rewrite
+
 # Install PHP 8.2 and necessary PHP extensions
 echo "Installing PHP 8.2 and extensions..."
 sudo add-apt-repository ppa:ondrej/php -y
@@ -61,6 +65,19 @@ sudo mkdir -p /var/www/domains
 echo "Creating symlink from /var/www/domains to /domains..."
 sudo ln -s /var/www/domains /domains
 
+# Update Apache configuration for /var/www
+echo "Updating Apache configuration for /var/www..."
+APACHE_CONF="/etc/apache2/apache2.conf"
+if ! grep -q "<Directory /var/www/>" "$APACHE_CONF"; then
+  echo "<Directory /var/www/>" | sudo tee -a "$APACHE_CONF"
+  echo "    Options Indexes FollowSymLinks" | sudo tee -a "$APACHE_CONF"
+  echo "    AllowOverride All" | sudo tee -a "$APACHE_CONF"
+  echo "    Require all granted" | sudo tee -a "$APACHE_CONF"
+  echo "</Directory>" | sudo tee -a "$APACHE_CONF"
+else
+  sudo sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/c\<Directory /var/www/>\n    Options Indexes FollowSymLinks\n    AllowOverride All\n    Require all granted\n</Directory>' "$APACHE_CONF"
+fi
+
 # Restart Apache to apply changes
 echo "Restarting Apache server..."
 sudo systemctl restart apache2
@@ -69,4 +86,4 @@ echo "Installation completed!"
 echo "You can access phpMyAdmin at http://localhost/phpmyadmin"
 echo "Composer has been installed. You can use it with the command 'composer'."
 echo "The /var/www/domains directory has been created, and a symlink to it is available at /domains."
-
+echo "The rewrite module has been enabled, and /var/www has been configured in Apache."
