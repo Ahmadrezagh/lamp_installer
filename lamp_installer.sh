@@ -20,10 +20,14 @@ sudo a2enmod rewrite
 echo "Installing PHP 8.2 and extensions..."
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update -y
-sudo apt install php8.2 php8.2-mysql php8.2-xml php8.2-mbstring php8.2-curl -y
+sudo apt install php8.2 php8.2-mysql php8.2-xml php8.2-mbstring php8.2-curl php8.2-zip php8.2-gd -y
 
 # Verify PHP installation
 php -v
+
+# Set PHP 8.2 as default for CLI
+echo "Setting PHP 8.2 as default for CLI..."
+sudo update-alternatives --set php /usr/bin/php8.2
 
 # Configure Apache to use PHP 8.2
 echo "Configuring Apache to use PHP 8.2..."
